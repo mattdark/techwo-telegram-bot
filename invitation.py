@@ -29,7 +29,7 @@ def updateZip(zipname, filename, data):
         zf.writestr(filename, data)
 
 def speaker(name, org):
-    filen = './invitation/invitacion_ponencia.odt'
+    filen = './invitacion_ponencia.odt'
     name = name
     org = org
     ds = dates()
