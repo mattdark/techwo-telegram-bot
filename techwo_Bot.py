@@ -6,7 +6,7 @@ import logging
 import operator
 from invitation import speaker
 
-updater = Updater(token='399691739:AAFbqesT-lseUVYl6jaaAm3HZU1I8R3IzeA')
+updater = Updater(token='TOKEN')
 dispatcher = updater.dispatcher
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
