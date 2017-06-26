@@ -1,49 +1,30 @@
-#!/usr/bin/env python3.6
-# -*- coding: utf-8 -*-
-from ezodf import newdoc
-import os
-import zipfile
-import tempfile
-import xlrd
+from docx import Document
+from docx.shared import Inches, Pt
 from dates import dates
 
-def updateZip(zipname, filename, data):
-    # generate a temp file
-    tmpfd, tmpname = tempfile.mkstemp(dir=os.path.dirname(zipname))
-    os.close(tmpfd)
-
-    # create a temp copy of the archive without filename
-    with zipfile.ZipFile(zipname, 'r') as zin:
-        with zipfile.ZipFile(tmpname, 'w') as zout:
-            zout.comment = zin.comment # preserve the comment
-            for item in zin.infolist():
-                if item.filename != filename:
-                    zout.writestr(item, zin.read(item.filename))
-
-    # replace with the temp archive
-    os.remove(zipname)
-    os.rename(tmpname, zipname)
-
-    # now add filename with its new data
-    with zipfile.ZipFile(zipname, mode='a', compression=zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr(filename, data)
-
-def speaker(name, org):
-    filen = './invitacion_ponencia.odt'
-    name = name
-    org = org
+def speaker (name, org):
+    document = Document('./format/invitation.docx')
+    style = document.styles['Title']
+    font = style.font
+    font.name = 'Arial'
+    font.size = Pt(12)
+    font.bold = True
     ds = dates()
-    docx = newdoc(doctype='odt', filename=filen, template='./format/invitation.odt')
-    docx.save()
-    a = zipfile.ZipFile('./format/invitation.odt')
-    content = a.read('content.xml')
-    content = str(content.decode(encoding='utf8'))
-    content = str.replace(content,"Nombre", name)
-    content = str.replace(content,"Organización", org)
-    content = str.replace(content,"Fecha1", ds[0])
-    content = str.replace(content,"Fecha2", ds[1])
-    content = str.replace(content,"Fecha3", ds[2])
-    content = str.replace(content,"Fecha4", ds[3])
-    updateZip(filen, 'content.xml', content)
-    cm = "unoconv -f pdf " + filen
-    os.system(cm)
+
+    for paragraph in document.paragraphs:
+        if 'Nombre' in paragraph.text:
+            paragraph.style = document.styles['Title']
+            paragraph.text = name
+        elif 'Organización' in paragraph.text:
+            paragraph.style = document.styles['Title']
+            paragraph.text = org
+        elif 'Fecha1' in paragraph.text:
+            paragraph.text = ds[0]
+        elif 'Fecha2' in paragraph.text:
+            paragraph.text = ds[1]
+        elif 'Fecha3' in paragraph.text:
+            paragraph.text = ds[2]
+        elif 'Fecha4' in paragraph.text:
+            paragraph.text = ds[3]
+
+    document.save('./invitation/invitacion_ponencia.docx')
