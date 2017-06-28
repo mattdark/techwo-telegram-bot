@@ -1,0 +1,5 @@
+#python-docx is a Python library for creating and updating Microsoft Word (.docx) files
+python-docx
+
+#python-telegram-bot is a library that provides an interface for the Telegram Bot API
+python-telegram-bot
