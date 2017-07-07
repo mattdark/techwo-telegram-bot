@@ -15,7 +15,7 @@ def dates():
         if month > 12:
             month = month - 12
             year = year + 1
-        # Get the first "day" of the month and the number of days in the month
+        # Get the first "day" of the month and the number of days in the month  0 1 2 3 4 5 6
         month_range = calendar.monthrange(year, month)
         month_name = months[month - 1]
         if month_range[0] == 6:
